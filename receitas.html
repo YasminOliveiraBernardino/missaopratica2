@@ -9,13 +9,14 @@
     integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
 </head>
-<body>
+<body onload="preencherCatalogo">
 
     <main class="container-fluid bg-warning">
         <div class="flex-wrap" id="pnlCatalogo"></div>
     </main>
 
     <script>
+        
         const receitas = [
             {
                 "titulo": "Arroz de couve-flor",
@@ -60,16 +61,51 @@
 
         function getListaIngredientes(receita){
 
+            let lista = ["<ul>"];
+
+            receita.ingredientes.map((item) => lista.push("<li>" + item + "</li>"));
+
+            let receitaHTML = lista.reduce((item, proxItem) => item + proxItem);
+
+            receitaHTML += "</ul>";
+
+            return receitaHTML
+
         }
 
         function getCard(receita){
 
+            return `
+                    
+            <div class="card" style="width: 250px;">
+            <img class="card-img-top" src="${receita.imagem}" alt="">
+            <div class="card-body">
+                <h2 class="card-title">${receita.titulo}</h2>
+                <div class="card-text">
+                    <ul>
+                        ${getListaIngredientes(receita.ingredientes)}
+                    </ul>
+                    <hr>
+                    <p>
+                        ${receita.preparo}
+                    </p>
+                </div>
+            </div>
+        
+        </div>
+                    
+            `
         }
 
-        body.onload = function preencherCatalogo(){
-            console.log("oi")
-        }
+        function preencherCatalogo(){
+            const catalogo = document.getElementById("pnlCatalogo");
 
-    </script>
+            const catalogoP = receitas.map(receita => getCard(receita)).join('');
+
+            catalogo.innerHTML = catalogoP;
+        }
+        
+        </script>
+        
 </body>
 </html>
